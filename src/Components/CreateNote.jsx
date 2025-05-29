@@ -1,40 +1,74 @@
-import React from 'react';
-import { TextField, Button, Box, Paper } from '@mui/material';
+import React, { useState } from 'react';
+import { TextField, Box, Paper, IconButton } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 
 const CreateNote = () => {
+  const [note, setNote] = useState({
+    title: "",
+    content: "",
+  });
+
+  const InputEvent = (event) => {
+    const { name, value } = event.target;
+    setNote((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
   return (
     <Paper
       elevation={3}
       sx={{
         p: 3,
         m: 3,
-        maxWidth: 500, // Reduced width
+        maxWidth: 500,
         mx: 'auto',
-        borderRadius: 3, // Rounded corners (3 = 24px)
+        borderRadius: 3,
+        position: 'relative',
       }}
     >
       <Box display="flex" flexDirection="column" gap={2}>
-        <TextField label="Note Title" variant="outlined" fullWidth />
         <TextField
-          label="Write a note"
-          multiline
-          rows={4}
+          onChange={InputEvent}
+          value={note.title}
+          name="title"
+          label="Note Title"
           variant="outlined"
           fullWidth
         />
-        <Button
-          variant="contained"
+
+        <TextField
+          onChange={InputEvent}
+          value={note.content}
+          name="content"
+          label="Write a note..."
+          multiline
+          rows={4}
+          fullWidth
+          variant="outlined"
           sx={{
-            bgcolor: 'yellow',
-            color: 'black',
-            fontWeight: 'bold',
-            '&:hover': {
-              bgcolor: '#fdd835', // Slightly darker yellow on hover
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': { border: 'none' },
+              bgcolor: '#f9f9f9',
+              borderRadius: 2,
+              padding: 1,
             },
           }}
-        >
-          Add
-        </Button>
+        />
+
+        <Box display="flex" justifyContent="flex-end">
+          <IconButton
+            sx={{
+              bgcolor: 'yellow',
+              color: 'black',
+              '&:hover': { bgcolor: '#fdd835' },
+              mt: 1,
+            }}
+          >
+            <AddIcon />
+          </IconButton>
+        </Box>
       </Box>
     </Paper>
   );
