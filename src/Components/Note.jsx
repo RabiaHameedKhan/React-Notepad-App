@@ -1,30 +1,31 @@
+// Note.js
 import React from 'react';
 import { TextField, Box, Paper, IconButton } from '@mui/material';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
 
-const Note = () => {
+const Note = ({ title, content }) => {
   return (
     <Paper
       elevation={3}
       sx={{
         p: 2,
         m: 2,
-        width: 300, // smaller width
-        ml: 3,      // align left with left margin
+        width: 300,
+        ml: 3,
         borderRadius: 2,
         bgcolor: 'white',
       }}
     >
       <Box display="flex" flexDirection="column" gap={1}>
         <TextField
-          value="Sample Title"
+          value={title}
           variant="standard"
           InputProps={{ disableUnderline: true, readOnly: true }}
         />
 
         <TextField
-          value="This is a sample note content."
+          value={content}
           multiline
           rows={3}
           fullWidth

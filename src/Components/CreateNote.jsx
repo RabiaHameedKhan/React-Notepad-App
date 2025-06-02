@@ -1,8 +1,9 @@
+// CreateNote.js
 import React, { useState } from 'react';
 import { TextField, Box, Paper, IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
-const CreateNote = () => {
+const CreateNote = ({ onAdd }) => {
   const [note, setNote] = useState({
     title: "",
     content: "",
@@ -14,6 +15,11 @@ const CreateNote = () => {
       ...prevData,
       [name]: value,
     }));
+  };
+
+  const submitNote = () => {
+    onAdd(note);
+    setNote({ title: "", content: "" });
   };
 
   return (
@@ -59,6 +65,7 @@ const CreateNote = () => {
 
         <Box display="flex" justifyContent="flex-end">
           <IconButton
+            onClick={submitNote}
             sx={{
               bgcolor: 'yellow',
               color: 'black',
