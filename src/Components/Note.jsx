@@ -1,10 +1,23 @@
-// Note.js
-import React from 'react';
+import React, { useState } from 'react';
 import { TextField, Box, Paper, IconButton } from '@mui/material';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
 
-const Note = ({ title, content }) => {
+const Note = ({ index, title, content, onDelete, onEdit }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editableNote, setEditableNote] = useState({ title, content });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEditableNote((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSave = () => {
+    onEdit(index, editableNote);
+    setIsEditing(false);
+  };
+
   return (
     <Paper
       elevation={3}
@@ -19,20 +32,27 @@ const Note = ({ title, content }) => {
     >
       <Box display="flex" flexDirection="column" gap={1}>
         <TextField
-          value={title}
-          variant="standard"
-          InputProps={{ disableUnderline: true, readOnly: true }}
+          name="title"
+          value={editableNote.title}
+          onChange={handleChange}
+          variant={isEditing ? 'outlined' : 'standard'}
+          InputProps={{
+            disableUnderline: !isEditing,
+            readOnly: !isEditing,
+          }}
         />
 
         <TextField
-          value={content}
+          name="content"
+          value={editableNote.content}
+          onChange={handleChange}
           multiline
           rows={3}
           fullWidth
-          variant="standard"
+          variant={isEditing ? 'outlined' : 'standard'}
           InputProps={{
-            disableUnderline: true,
-            readOnly: true,
+            disableUnderline: !isEditing,
+            readOnly: !isEditing,
             sx: {
               bgcolor: '#f9f9f9',
               borderRadius: 1,
@@ -42,21 +62,25 @@ const Note = ({ title, content }) => {
         />
 
         <Box display="flex" justifyContent="flex-end" gap={1} mt={1}>
+          {isEditing ? (
+            <IconButton
+              onClick={handleSave}
+              sx={{ bgcolor: 'yellow', '&:hover': { bgcolor: '#fdd835' } }}
+            >
+              <SaveIcon />
+            </IconButton>
+          ) : (
+            <IconButton
+              onClick={() => setIsEditing(true)}
+              sx={{ bgcolor: 'yellow', '&:hover': { bgcolor: '#fdd835' } }}
+            >
+              <EditIcon />
+            </IconButton>
+          )}
+
           <IconButton
-            sx={{
-              bgcolor: 'yellow',
-              '&:hover': { bgcolor: '#fdd835' },
-            }}
-            aria-label="edit"
-          >
-            <EditIcon />
-          </IconButton>
-          <IconButton
-            sx={{
-              bgcolor: 'yellow',
-              '&:hover': { bgcolor: '#fdd835' },
-            }}
-            aria-label="delete"
+            onClick={() => onDelete(index)}
+            sx={{ bgcolor: 'yellow', '&:hover': { bgcolor: '#fdd835' } }}
           >
             <DeleteOutlineIcon />
           </IconButton>

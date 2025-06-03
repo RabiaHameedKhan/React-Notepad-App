@@ -8,28 +8,38 @@ import { Box } from '@mui/material';
 const App = () => {
   const [notes, setNotes] = useState([]);
 
-  // Function to add a new note
+  // Add a note
   const addNote = (newNote) => {
     setNotes((prevNotes) => [...prevNotes, newNote]);
   };
 
+  // Delete a note
+  const deleteNote = (indexToDelete) => {
+    setNotes((prevNotes) => prevNotes.filter((_, index) => index !== indexToDelete));
+  };
+
+  // Edit a note
+  const editNote = (indexToEdit, updatedNote) => {
+    setNotes((prevNotes) =>
+      prevNotes.map((note, index) => (index === indexToEdit ? updatedNote : note))
+    );
+  };
+
   return (
-    <Box
-      sx={{
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
+    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Header />
       <Box sx={{ flex: 1, p: 2 }}>
-        {/* Pass onAdd function as a prop */}
         <CreateNote onAdd={addNote} />
-
-        {/* Render all notes */}
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
           {notes.map((note, index) => (
-            <Note key={index} title={note.title} content={note.content} />
+            <Note
+              key={index}
+              index={index}
+              title={note.title}
+              content={note.content}
+              onDelete={deleteNote}
+              onEdit={editNote}
+            />
           ))}
         </Box>
       </Box>
